@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D bottle beer</title>
+    <!--Google Fonts and Icons-->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Round|Material+Icons+Sharp|Material+Icons+Two+Tone"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        width: 100%;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+      .center {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .main {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+      .layers {
+        width: 500%;
+        height: 100%;
+        display: flex;
+        transition: cubic-bezier(0.71, 0, 0.38, 1) 0.8s;
+      }
+      .layer {
+        width: 100vw;
+        height: 100%;
+        background: #c2b67570;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        position: relative;
+        overflow: scroll;
+      }
+      .container {
+        width: fit-content;
+        height: fit-content;
+        position: relative;
+        margin-top: 75px;
+        overflow: hidden;
+      }
+      .can {
+        width: 200px;
+        position: relative;
+      }
+      .can img {
+        width: 200px;
+      }
+      .wrapper {
+        position: absolute;
+        width: fit-content;
+        height: 90%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -53%);
+        mix-blend-mode: multiply;
+        transition: cubic-bezier(0.71, 0, 0.38, 1) 1.2s;
+      }
+      .wrapper img {
+        height: 100%;
+        margin-left: 10px;
+      }
+      .layer label {
+        display: block;
+        font-family: poppins;
+        box-sizing: border-box;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: 0.5mm solid black;
+        border-radius: 10mm;
+        cursor: pointer;
+        margin-top: 75px;
+      }
+      #toggle {
+        display: none;
+      }
+      .text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-family: poppins;
+        font-size: 175px;
+        font-weight: 500;
+        color: #c2b675be;
+        transition: cubic-bezier(0.71, 0, 0.38, 1) 1.2s;
+      }
+      .fruits {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: cubic-bezier(0.71, 0, 0.38, 1) 1.2s;
+      }
+      .fruits img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: cubic-bezier(0.71, 0, 0.38, 1) 1.2s;
+      }
+      .layer:nth-child(1) .fruits img:nth-child(1) {
+        width: 125px;
+        transform: translate(calc(-50% - 225px), calc(-50% - 150px));
+      }
+      .layer:nth-child(1) .fruits img:nth-child(2) {
+        width: 180px;
+        transform: translate(calc(-50% + 275px), calc(-50% - 50px));
+      }
+      .layer:nth-child(1) .fruits img:nth-child(3) {
+        width: 250px;
+        transform: translate(calc(-50% - 175px), calc(-50% + 115px));
+      }
+      .layer:nth-child(2) {
+        background: #00773a4b;
+      }
+      .layer:nth-child(2) .text {
+        color: #00773acb;
+      }
+      .layer:nth-child(2) .fruits img:nth-child(1) {
+        width: 75px;
+        transform: translate(calc(-50% + 180px), calc(-50% + 90px));
+      }
+      .layer:nth-child(2) .fruits img:nth-child(2) {
+        width: 275px;
+        transform: translate(calc(-50% + 225px), calc(-50% - 125px));
+      }
+      .layer:nth-child(2) .fruits img:nth-child(3) {
+        width: 200px;
+        transform: translate(calc(-50% - 200px), calc(-50% + 50px));
+      }
+      #toggle:checked ~ .main .layers .layer:nth-child(1) .container .wrapper {
+        left: -50%;
+      }
+      #toggle:checked ~ .main .layers .layer:nth-child(1) .text {
+        left: 150%;
+      }
+      #toggle:checked ~ .main .layers .layer:nth-child(1) .fruits img {
+        transform: translate(-100%, -50%);
+      }
+      #toggle:checked ~ .main .layers .layer:nth-child(1) .fruits {
+        left: 125%;
+      }
+
+      #toggle:not(:checked)
+        ~ .main
+        .layers
+        .layer:nth-child(2)
+        .container
+        .wrapper {
+        left: 150%;
+      }
+
+      #toggle:not(:checked) ~ .main .layers .layer:nth-child(2) .text {
+        left: -50%;
+      }
+
+      #toggle:not(:checked) ~ .main .layers .layer:nth-child(2) .fruits img {
+        transform: translate(-100%, -50%);
+      }
+      #toggle:not(:checked) ~ .main .layers .layer:nth-child(2) .fruits {
+        left: 0;
+      }
+      .layer:nth-child(3) {
+        background: rgb(193, 254, 242); /* Customize as needed */
+      }
+
+      .layer:nth-child(3) .text {
+        color: rgb(115, 235, 229); /* Customize as needed */
+      }
+
+      .layer:nth-child(3) .fruits img:nth-child(1) {
+        width: 100px; /* Customize as needed */
+        transform: translate(
+          calc(-50% + 100px),
+          calc(-50% + 90px)
+        ); /* Customize as needed */
+      }
+
+      .layer:nth-child(3) .fruits img:nth-child(2) {
+        width: 200px; /* Customize as needed */
+        transform: translate(
+          calc(-50% + 150px),
+          calc(-50% - 125px)
+        ); /* Customize as needed */
+      }
+
+      .layer:nth-child(3) .fruits img:nth-child(3) {
+        width: 150px; /* Customize as needed */
+        transform: translate(
+          calc(-50% - 150px),
+          calc(-50% + 50px)
+        ); /* Customize as needed */
+      }
+
+      .layer:nth-child(4) {
+        background: rgb(240, 193, 254); /* Customize as needed */
+      }
+
+      .layer:nth-child(4) .text {
+        color: rgb(187, 115, 235); /* Customize as needed */
+      }
+
+      .layer:nth-child(4) .fruits img:nth-child(1) {
+        width: 120px; /* Customize as needed */
+        transform: translate(
+          calc(-50% + 120px),
+          calc(-50% + 90px)
+        ); /* Customize as needed */
+      }
+
+      .layer:nth-child(4) .fruits img:nth-child(2) {
+        width: 250px; /* Customize as needed */
+        transform: translate(
+          calc(-50% + 200px),
+          calc(-50% - 125px)
+        ); /* Customize as needed */
+      }
+
+      .layer:nth-child(4) .fruits img:nth-child(3) {
+        width: 180px; /* Customize as needed */
+        transform: translate(
+          calc(-50% - 180px),
+          calc(-50% + 50px)
+        ); /* Customize as needed */
+      }
+
+      .layer:nth-child(5) {
+        background: rgb(254, 237, 193); /* Customize as needed */
+      }
+
+      .layer:nth-child(5) .text {
+        color: rgb(235, 207, 115); /* Customize as needed */
+      }
+
+      .layer:nth-child(5) .fruits img:nth-child(1) {
+        width: 150px; /* Customize as needed */
+        transform: translate(
+          calc(-50% + 150px),
+          calc(-50% + 90px)
+        ); /* Customize as needed */
+      }
+
+      .layer:nth-child(5) .fruits img:nth-child(2) {
+        width: 300px; /* Customize as needed */
+        transform: translate(
+          calc(-50% + 250px),
+          calc(-50% - 125px)
+        ); /* Customize as needed */
+      }
+
+      .layer:nth-child(5) .fruits img:nth-child(3) {
+        width: 220px; /* Customize as needed */
+        transform: translate(
+          calc(-50% - 220px),
+          calc(-50% + 50px)
+        ); /* Customize as needed */
+      }
+      #toggle:checked ~ .main .layers {
+        transform: translateX(-20%);
+      }
+
+      .layer .copyright {
+        font-family: poppins;
+        font-size: 10px;
+        position: absolute;
+        top: 0px;
+        right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="center">
+      <input type="checkbox" name="" id="toggle" />
+      <div class="main">
+        <div class="layers">
+          <!-- <LAYER 1> -->
+          <div class="layer">
+            <p3 class="copyright">be inspired by "snippetsdevelop.github.io"</p3>
+
+            <div class="text">Chang</div>
+
+            <div class="container">
+              <div class="can">
+                <img src="../images/can 2.png" alt="" />
+              </div>
+
+              <div class="wrapper">
+                <img src="../images/Chang.png" alt="" />
+              </div>
+            </div>
+
+            <div class="fruits">
+              <img src="../images/flower_3.png" alt="" />
+              <img src="../images/flower_2.png" alt="" />
+              <img src="../images/flower_1.png" alt="" />
+            </div>
+
+            <label for="toggle">Click to Slide</label>
+          </div>
+          <!-- <LAYER 2> -->
+          <div class="layer">
+            <div class="text">Heineken</div>
+
+            <div class="container">
+              <div class="can">
+                <img src="../images/can 2.png" alt="" />
+              </div>
+
+              <div class="wrapper">
+                <img src="../images/Heineken.png" alt="" />
+              </div>
+            </div>
+
+            <div class="fruits">
+              <img src="../images/star_3.png" alt="" />
+              <img src="../images/star_2.png" alt="" />
+              <img src="../images/star_1.png" alt="" />
+            </div>
+
+            <label for="toggle">Click to Slide</label>
+          </div>
+          <!-- <LAYER 3> -->
+          <div class="layer">
+            <div class="text">Tiger</div>
+
+            <div class="container">
+              <div class="can">
+                <img src="../images/can 2.png" alt="" />
+              </div>
+
+              <div class="wrapper">
+                <img src="../images/Tiger.png" alt="" />
+              </div>
+            </div>
+
+            <div class="fruits">
+              <img src="../images/tree_3.png" alt="" />
+              <img src="../images/tree_2.png" alt="" />
+              <img src="../images/tree_1.png" alt="" />
+            </div>
+
+            <label for="toggle">Click to Slide</label>
+          </div>
+          <!-- <LAYER 4> -->
+          <div class="layer">
+            <div class="text">Singha</div>
+
+            <div class="container">
+              <div class="can">
+                <img src="../images/can 2.png" alt="" />
+              </div>
+
+              <div class="wrapper">
+                <img src="../images/Singha.png" alt="" />
+              </div>
+            </div>
+
+            <div class="fruits">
+              <img src="../images/lion_3.png" alt="" />
+              <img src="../images/lion_2.png" alt="" />
+              <img src="../images/lion_1.png" alt="" />
+            </div>
+
+            <label for="toggle">Click to Slide</label>
+          </div>
+          <!-- <LAYER 5> -->
+          <div class="layer">
+            <div class="text">Budweiser</div>
+
+            <div class="container">
+              <div class="can">
+                <img src="../images/can 2.png" alt="" />
+              </div>
+
+              <div class="wrapper">
+                <img src="../images/Budweiser.png" alt="" />
+              </div>
+            </div>
+
+            <div class="fruits">
+              <img src="../images/crown_3.png" alt="" />
+              <img src="../images/crown_2.png" alt="" />
+              <img src="../images/crown_1.png" alt="" />
+            </div>
+
+            <label for="toggle">Click to Slide</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <script>
+      document.querySelectorAll('label[for="toggle"]').forEach((label) => {
+        label.addEventListener("click", function () {
+          const checkbox = document.getElementById("toggle");
+          checkbox.checked = !checkbox.checked;
+          document.querySelector(".main .layers").classList.toggle("slide");
+        });
+      });
+    </script> -->
+  </body>
+</html>
